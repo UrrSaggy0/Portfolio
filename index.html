@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aarav Verma — Creative Developer & Designer</title>
+<meta name="description" content="Portfolio of Aarav Verma — creative developer crafting expressive, high-performing websites.">
+
+<!-- Fonts: Clash Display (display) + Satoshi (body) -->
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --paper:#FAFAF7;        /* warm white base */
+  --white:#FFFFFF;
+  --ink:#101010;
+  --muted:#6F6C66;
+  --line:#E7E5DE;
+  --accent:#FF4D00;       /* vermillion — ek hi accent, poore page me */
+  --ease:cubic-bezier(.16,1,.3,1);
+  --font-d:'Clash Display',sans-serif;
+  --font-b:'Satoshi',sans-serif;
+}
+
+/* ============ BASE ============ */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+
+body{
+  font-family:var(--font-b);
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--ink);color:var(--paper)}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+section{scroll-margin-top:90px}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:var(--paper)}
+::-webkit-scrollbar-thumb{background:#C9C6BD;border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:var(--ink)}
+
+@media (hover:hover) and (pointer:fine){
+  .js body, .js a, .js button, .js [role="button"]{cursor:none}
+}
+
+/* ============ UTILITIES ============ */
+.label{
+  font-size:.75rem;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);
+}
+.label .idx{color:var(--accent);margin-right:.6rem}
+.sec{padding:clamp(5rem,10vw,9rem) 0}
+.sec-title{
+  font-family:var(--font-d);font-weight:600;
+  font-size:clamp(2.6rem,6vw,4.8rem);line-height:1.02;
+  letter-spacing:-.02em;margin:1.2rem 0 0;
+}
+.accent{color:var(--accent);font-style:normal}
+.grain{
+  position:fixed;inset:-60%;width:220%;height:220%;
+  pointer-events:none;z-index:2100;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  animation:grain 9s steps(8) infinite;
+}
+@keyframes grain{
+  0%,100%{transform:translate3d(0,0,0)} 25%{transform:translate3d(-3%,2%,0)}
+  50%{transform:translate3d(2%,-3%,0)} 75%{transform:translate3d(-2%,-2%,0)}
+}
+
+/* ============ REVEAL SYSTEM (sirf transform + opacity → GPU) ============ */
+[data-reveal]{
+  opacity:0;transform:translate3d(0,44px,0);
+  transition:opacity 1s var(--ease),transform 1s var(--ease);
+  transition-delay:var(--d,0s);
+}
+[data-reveal].in{opacity:1;transform:none}
+
+.lm-group[data-reveal]{opacity:1;transform:none;transition:none}
+.lm{display:block;overflow:hidden}
+.lmi{
+  display:block;transform:translate3d(0,115%,0);
+  transition:transform 1.15s var(--ease);transition-delay:var(--d,0s);
+}
+.lm-group.in .lmi{transform:none}
+
+.img-reveal{position:relative;overflow:hidden}
+.img-reveal::after{
+  content:"";position:absolute;inset:0;background:var(--paper);
+  transform:scaleY(1);transform-origin:top;
+  transition:transform 1.05s var(--ease);transition-delay:var(--d,0s);
+}
+.img-reveal.in::after,.in .img-reveal::after{transform:scaleY(0)}
+.img-reveal img{transform:scale(1.28);transition:transform 1.3s var(--ease)}
+.img-reveal.in img,.in .img-reveal img{transform:scale(1)}
+
+/* ============ PRELOADER ============ */
+.preloader{
+  position:fixed;inset:0;background:var(--paper);z-index:2000;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .95s cubic-bezier(.76,0,.24,1);
+}
+.preloader.exit{transform:translate3d(0,-101%,0)}
+.pl-num{
+  font-family:var(--font-d);font-weight:600;line-height:1;
+  font-size:clamp(4.5rem,15vw,10rem);letter-spacing:-.03em;
+}
+.pl-meta{position:absolute;top:2rem;left:2rem;right:2rem;display:flex;justify-content:space-between}
+.pl-bar{position:absolute;bottom:0;left:0;width:100%;height:3px;background:var(--ink);transform:scaleX(0);transform-origin:left}
+
+/* ============ CUSTOM CURSOR ============ */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;z-index:2200;pointer-events:none;opacity:0;transition:opacity .3s}
+.cursor-on .cursor-dot,.cursor-on .cursor-ring{opacity:1}
+.cdot{width:6px;height:6px;margin:-3px 0 0 -3px;background:#fff;border-radius:50%;mix-blend-mode:difference}
+.cring{
+  width:44px;height:44px;margin:-22px 0 0 -22px;border:1.5px solid #fff;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;mix-blend-mode:difference;
+  transition:transform .4s var(--ease),background-color .35s,border-color .35s;
+}
+.cursor-ring .cring span{
+  font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;opacity:0;transition:opacity .25s;
+}
+body.cursor-grow .cring{transform:scale(1.55)}
+body.cursor-view .cring{
+  transform:scale(2.35);background:var(--accent);border-color:transparent;
+  mix-blend-mode:normal;
+}
+body.cursor-view .cring span{opacity:1}
+body.cursor-view .cdot{opacity:0}
+@media (hover:none){.cursor-dot,.cursor-ring{display:none}}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:1.1rem 0;transition:background-color .4s,box-shadow .4s,padding .4s;
+}
+.nav.scrolled{
+  background:rgba(250,250,247,.82);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);padding:.7rem 0;
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--font-d);font-weight:600;font-size:1.25rem;letter-spacing:-.01em}
+.logo em{color:var(--accent);font-style:normal}
+.nav-links{display:flex;gap:2.2rem}
+.nav-link-x{position:relative;font-size:.92rem;font-weight:500;color:var(--muted);transition:color .3s}
+.nav-link-x:hover,.nav-link-x.active{color:var(--ink)}
+.nav-link-x::after{
+  content:"";position:absolute;left:0;bottom:-5px;width:100%;height:1.5px;background:var(--accent);
+  transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease);
+}
+.nav-link-x:hover::after,.nav-link-x.active::after{transform:scaleX(1);transform-origin:left}
+.nav-right{display:flex;align-items:center;gap:.8rem}
+.nav-toggle{
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  background:var(--white);font-size:1.2rem;color:var(--ink);
+  display:grid;place-items:center;transition:background-color .3s,color .3s;
+}
+.nav-toggle:hover{background:var(--ink);color:var(--paper)}
+
+/* ============ BUTTONS ============ */
+.btn-x{
+  position:relative;overflow:hidden;display:inline-flex;align-items:center;
+  border-radius:100px;border:1px solid var(--ink);background:transparent;color:var(--ink);
+  padding:.85rem 1.7rem;font-weight:500;font-size:.95rem;
+  transition:color .35s,border-color .35s;
+}
+.btn-x>span{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.5rem}
+.btn-x::before{
+  content:"";position:absolute;inset:0;background:var(--ink);border-radius:inherit;
+  transform:translateY(102%);transition:transform .5s var(--ease);
+}
+.btn-x:hover{color:var(--paper)}
+.btn-x:hover::before{transform:translateY(0)}
+.btn-x.solid{background:var(--ink);color:var(--paper)}
+.btn-x.solid::before{background:var(--accent)}
+.btn-x.solid:hover{border-color:var(--accent);color:#fff}
+.btn-sm-x{padding:.6rem 1.3rem;font-size:.88rem}
+
+/* ============ HERO ============ */
+.hero{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  position:relative;padding:7.5rem 0 3rem;
+}
+.hero-guides{position:absolute;inset:0;pointer-events:none;display:flex;justify-content:space-between;padding:0}
+.hero-guides i{width:1px;height:100%;background:var(--ink);opacity:.05}
+.hero-title{
+  font-family:var(--font-d);font-weight:600;line-height:.96;letter-spacing:-.025em;
+  font-size:clamp(3.4rem,11.5vw,10.2rem);text-transform:uppercase;margin:1.6rem 0 0;
+}
+.hero-chip{
+  display:inline-block;width:clamp(72px,9.5vw,148px);height:.66em;
+  border-radius:100px;overflow:hidden;vertical-align:baseline;
+  transform:translateY(.05em);margin-right:.06em;
+}
+.hero-chip img{width:100%;height:100%;object-fit:cover}
+.hero-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem}
+.avail{display:inline-flex;align-items:center;gap:.6rem;font-size:.85rem;font-weight:500}
+.avail i{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block;animation:pulse 1.8s var(--ease) infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.45}}
+.hero-coords{font-size:.85rem;color:var(--muted)}
+.hero-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:clamp(2.5rem,6vh,5rem)}
+.hero-desc{max-width:440px;font-size:1.05rem;line-height:1.65;color:var(--muted)}
+.hero-desc strong{color:var(--ink);font-weight:700}
+.badge-rot{position:relative;width:110px;height:110px;flex:none}
+.badge-rot svg{width:100%;height:100%;animation:spin 14s linear infinite}
+.badge-rot text{font-family:var(--font-b);font-weight:700;font-size:8.4px;letter-spacing:.22em;fill:var(--ink)}
+.badge-rot>i{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-size:1.25rem;color:var(--accent);
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scroll-cue{
+  position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);
+  font-size:.72rem;font-weight:700;letter-spacing:.2em;color:var(--muted);
+}
+.scroll-cue::after{
+  content:"";display:block;width:1px;height:34px;background:var(--muted);
+  margin:.6rem auto 0;transform-origin:top;animation:cue 1.6s var(--ease) infinite;
+}
+@keyframes cue{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+/* ============ MARQUEE ============ */
+.marquee{overflow:hidden;border-block:1px solid var(--line);padding:1.15rem 0;background:var(--white)}
+.marquee-track{display:flex;width:max-content;animation:marq 26s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+@keyframes marq{to{transform:translate3d(-50%,0,0)}}
+.m-group{display:flex;flex:none}
+.m-item{
+  display:inline-flex;align-items:center;gap:1.4rem;padding-right:1.4rem;
+  font-family:var(--font-d);font-weight:500;font-size:1.45rem;
+  text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;
+}
+.m-item i{font-size:.85rem;color:var(--accent)}
+
+/* ============ ABOUT ============ */
+.about-img-wrap{position:relative}
+.about-sticky{position:sticky;top:110px}
+.about-img{border-radius:18px;aspect-ratio:3/4}
+.about-img img{width:100%;height:112%;object-fit:cover}
+.statement{
+  font-family:var(--font-d);font-weight:500;
+  font-size:clamp(1.55rem,3.3vw,2.7rem);line-height:1.3;letter-spacing:-.01em;
+}
+.statement .w{opacity:.13}
+.statement .wa{color:var(--accent)}
+.about-sub{margin-top:2rem;max-width:520px;color:var(--muted);line-height:1.7;font-size:1rem}
+.stats-row{margin-top:clamp(4rem,8vw,7rem)}
+.stat{border-top:1px solid var(--line);padding-top:1.4rem}
+.stat-n{font-family:var(--font-d);font-weight:600;font-size:clamp(2.6rem,4.5vw,3.8rem);line-height:1;letter-spacing:-.02em}
+.stat-n em{color:var(--accent);font-style:normal}
+.stat-l{display:block;margin-top:.5rem;font-size:.85rem;color:var(--muted)}
+
+/* ============ WORKS ============ */
+.works-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:clamp(3rem,6vw,5rem)}
+.works-range{font-size:.85rem;color:var(--muted)}
+.work{display:block}
+.work-figure{border-radius:18px;overflow:hidden;position:relative;will-change:transform}
+.work-figure img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.ar-43{aspect-ratio:4/3}.ar-34{aspect-ratio:3/4}.ar-45{aspect-ratio:4/5}.ar-32{aspect-ratio:3/2}
+.work.in:hover .work-figure img{transform:scale(1.06);transition-duration:.85s}
+.work-info{margin-top:1.2rem}
+.work-top{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.work-title{font-family:var(--font-d);font-weight:600;font-size:clamp(1.4rem,2.4vw,1.9rem);letter-spacing:-.01em}
+.work-link{
+  width:46px;height:46px;flex:none;border:1px solid var(--line);border-radius:50%;
+  display:grid;place-items:center;font-size:1.05rem;
+  transition:background-color .35s,color .35s,border-color .35s,transform .35s var(--ease);
+}
+.work:hover .work-link{background:var(--accent);border-color:var(--accent);color:#fff;transform:rotate(45deg)}
+.work-meta{margin:.35rem 0 0;font-size:.88rem;color:var(--muted)}
+.col-push{margin-top:0}
+@media (min-width:992px){
+  .col-push{margin-top:20vh}
+  .col-push2{margin-top:9vh}
+  .works-row2{margin-top:6rem}
+}
+.works-cta{text-align:center;margin-top:clamp(4rem,8vw,6.5rem)}
+
+/* ============ EXPERTISE (Accordion) ============ */
+.accordion{--bs-accordion-bg:transparent}
+.acc-item{background:transparent!important;border:none!important;border-top:1px solid var(--line)!important}
+.acc-item:last-child{border-bottom:1px solid var(--line)!important}
+.accordion-button{
+  background:transparent!important;box-shadow:none!important;color:var(--ink)!important;
+  padding:2rem 0;gap:1.4rem;font-family:var(--font-d);font-weight:500;
+  font-size:clamp(1.35rem,2.6vw,2.05rem);letter-spacing:-.01em;
+}
+.accordion-button::after{display:none}
+.acc-num{font-family:var(--font-b);font-weight:700;font-size:.85rem;color:var(--muted);padding-top:.4rem;transition:color .3s}
+.accordion-button:hover .acc-num{color:var(--accent)}
+.acc-icon{
+  margin-left:auto;flex:none;width:46px;height:46px;border:1px solid var(--line);border-radius:50%;
+  display:grid;place-items:center;font-size:1.05rem;
+  transition:transform .45s var(--ease),background-color .35s,color .35s,border-color .35s;
+}
+.accordion-button:hover .acc-icon{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.accordion-button:not(.collapsed) .acc-icon{
+  transform:rotate(45deg);background:var(--accent);color:#fff;border-color:var(--accent);
+}
+.accordion-body{padding:0 0 2.4rem!important}
+.acc-desc{max-width:620px;color:var(--muted);line-height:1.7;margin-bottom:1.3rem}
+.tag{
+  display:inline-block;border:1px solid var(--line);border-radius:100px;
+  padding:.38rem 1rem;font-size:.8rem;font-weight:500;margin:0 .45rem .5rem 0;
+  background:var(--white);transition:border-color .3s,color .3s;
+}
+.tag:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ============ EXPERIENCE ============ */
+.xp-row{
+  display:grid;grid-template-columns:150px 1fr auto 46px;align-items:center;gap:1.2rem;
+  padding:2rem 0;border-top:1px solid var(--line);transition:background-color .3s;
+}
+.xp-row:last-child{border-bottom:1px solid var(--line)}
+.xp-year{font-size:.85rem;color:var(--muted);font-weight:500}
+.xp-role{font-family:var(--font-d);font-weight:600;font-size:clamp(1.15rem,2vw,1.5rem)}
+.xp-co{display:block;font-size:.88rem;color:var(--muted);margin-top:.15rem}
+.xp-loc{font-size:.85rem;color:var(--muted)}
+.xp-arrow{
+  width:46px;height:46px;border:1px solid var(--line);border-radius:50%;
+  display:grid;place-items:center;color:var(--muted);
+  transition:background-color .35s,color .35s,border-color .35s,transform .4s var(--ease);
+}
+.xp-row:hover .xp-arrow{background:var(--ink);border-color:var(--ink);color:var(--paper);transform:rotate(45deg)}
+@media (max-width:767px){
+  .xp-row{grid-template-columns:1fr auto;grid-template-areas:"year loc" "role arrow"}
+  .xp-year{grid-area:year}.xp-loc{grid-area:loc}.xp-main{grid-area:role}.xp-arrow{grid-area:arrow}
+}
+
+/* ============ FOOTER / CONTACT ============ */
+.footer{padding:clamp(6rem,12vw,10rem) 0 2rem;border-top:1px solid var(--line)}
+.footer-cta{display:block;margin:1.6rem 0 0}
+.footer-cta .sec-title{
+  font-size:clamp(3rem,10.5vw,8.6rem);text-transform:uppercase;
+  transition:color .4s;
+}
+.outline{color:transparent;-webkit-text-stroke:1.5px var(--ink);transition:color .4s,-webkit-text-stroke-color .4s}
+.footer-cta:hover .outline{color:var(--accent);-webkit-text-stroke-color:var(--accent)}
+.footer-cta .cta-arrow{
+  display:inline-block;font-size:.55em;vertical-align:.5em;margin-left:.15em;
+  transition:transform .45s var(--ease);color:var(--accent);
+}
+.footer-cta:hover .cta-arrow{transform:translate3d(.12em,-.12em,0) rotate(45deg)}
+.footer-info{margin-top:clamp(3rem,7vw,5.5rem)}
+.big-link{
+  font-family:var(--font-d);font-weight:500;font-size:clamp(1.2rem,2.4vw,1.7rem);
+  position:relative;display:inline-block;
+}
+.big-link::after{
+  content:"";position:absolute;left:0;bottom:-3px;width:100%;height:1.5px;background:var(--accent);
+  transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease);
+}
+.big-link:hover::after{transform:scaleX(1);transform-origin:left}
+.socials{display:flex;gap:.7rem;justify-content:flex-start}
+@media (min-width:768px){.socials{justify-content:flex-end}}
+.soc{
+  width:48px;height:48px;border:1px solid var(--line);border-radius:50%;
+  display:grid;place-items:center;font-size:1.1rem;background:var(--white);
+  transition:background-color .35s,color .35s,border-color .35s,transform .35s var(--ease);
+}
+.soc:hover{background:var(--ink);border-color:var(--ink);color:var(--paper);transform:translateY(-4px)}
+.footer-bar{
+  margin-top:clamp(3rem,6vw,5rem);padding-top:1.5rem;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+  font-size:.85rem;color:var(--muted);
+}
+.to-top{
+  width:52px;height:52px;border:1px solid var(--line);border-radius:50%;
+  display:grid;place-items:center;color:var(--ink);font-size:1.1rem;background:var(--white);
+  transition:background-color .35s,color .35s,border-color .35s;
+}
+.to-top:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ============ OFFCANVAS MENU ============ */
+.menu-oc{background:var(--paper);border-left:1px solid var(--line);width:min(420px,88vw)!important}
+.menu-oc .offcanvas-header{padding:1.4rem 2rem;border-bottom:1px solid var(--line)}
+.m-link{
+  display:flex;align-items:baseline;gap:1rem;font-family:var(--font-d);font-weight:600;
+  font-size:clamp(2.2rem,8vw,3rem);padding:1rem 0;border-bottom:1px solid var(--line);
+  opacity:0;transform:translate3d(30px,0,0);
+  transition:opacity .5s var(--ease),transform .5s var(--ease),color .3s;
+  transition-delay:0s;
+}
+.m-link small{font-family:var(--font-b);font-weight:700;font-size:.75rem;color:var(--accent)}
+.m-link:hover{color:var(--accent)}
+.menu-oc.show .m-link{opacity:1;transform:none;transition-delay:var(--d)}
+.menu-foot{margin-top:2.5rem;color:var(--muted);font-size:.9rem;line-height:1.8}
+
+/* ============ PROJECT MODAL ============ */
+.modal-content{border:none;border-radius:20px;background:var(--paper);overflow:hidden}
+.pm-img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.modal-close{
+  position:absolute;top:1.1rem;right:1.1rem;z-index:5;width:44px;height:44px;
+  border-radius:50%;border:none;background:rgba(250,250,247,.9);backdrop-filter:blur(6px);
+  display:grid;place-items:center;font-size:1.05rem;transition:background-color .3s,color .3s;
+}
+.modal-close:hover{background:var(--accent);color:#fff}
+.pm-year{font-size:.85rem;color:var(--muted)}
+.pm-meta div{padding:.9rem 0;border-top:1px solid var(--line)}
+.pm-meta .label{display:block;margin-bottom:.25rem}
+#pmTags{margin-top:1.2rem}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  [data-reveal],.lmi{opacity:1!important;transform:none!important}
+  .statement .w{opacity:1!important}
+  .img-reveal::after{display:none}
+  .img-reveal img{transform:none!important}
+}
+</style>
+<noscript><style>
+  [data-reveal],.lmi{opacity:1!important;transform:none!important}
+  .img-reveal::after{display:none}.img-reveal img{transform:none}
+  .statement .w{opacity:1}.preloader{display:none}
+</style></noscript>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ===== Preloader ===== -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pl-meta">
+    <span class="label">Aarav Verma — Folio</span>
+    <span class="label">© 2025</span>
+  </div>
+  <div class="pl-num" id="plNum">0</div>
+  <div class="pl-bar" id="plBar"></div>
+</div>
+
+<!-- ===== Custom cursor ===== -->
+<div class="cursor-dot" id="cDot" aria-hidden="true"><div class="cdot"></div></div>
+<div class="cursor-ring" id="cRing" aria-hidden="true"><div class="cring"><span id="cLabel"></span></div></div>
+
+<!-- ===== Scroll progress ===== -->
+<div style="position:fixed;top:0;left:0;right:0;height:2px;z-index:1500">
+  <div id="progress" style="height:100%;background:var(--ink);transform:scaleX(0);transform-origin:left"></div>
+</div>
+
+<!-- ===== Nav ===== -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <!-- ✏️ Apna naam yahan -->
+    <a href="#home" class="logo">Aarav<em>©</em></a>
+    <nav class="nav-links d-none d-lg-flex" aria-label="Primary">
+      <a class="nav-link-x" href="#about">About</a>
+      <a class="nav-link-x" href="#work">Work</a>
+      <a class="nav-link-x" href="#expertise">Expertise</a>
+      <a class="nav-link-x" href="#contact">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <a href="#contact" class="btn-x solid btn-sm-x d-none d-sm-inline-flex magnetic"><span>Let's talk <i class="bi bi-arrow-up-right"></i></span></a>
+      <button class="nav-toggle d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#menu" aria-label="Open menu"><i class="bi bi-list"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Mobile menu ===== -->
+<div class="offcanvas offcanvas-end menu-oc" tabindex="-1" id="menu" data-lenis-prevent>
+  <div class="offcanvas-header">
+    <span class="label">Menu</span>
+    <button type="button" class="nav-toggle" data-bs-dismiss="offcanvas" aria-label="Close menu"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="offcanvas-body px-4">
+    <a class="m-link" style="--d:.08s" href="#about"><small>01</small> About</a>
+    <a class="m-link" style="--d:.15s" href="#work"><small>02</small> Work</a>
+    <a class="m-link" style="--d:.22s" href="#expertise"><small>03</small> Expertise</a>
+    <a class="m-link" style="--d:.29s" href="#contact"><small>04</small> Contact</a>
+    <div class="menu-foot">
+      <p class="mb-1">New Delhi, India</p>
+      <a href="mailto:hello@aaravverma.in" class="big-link" style="font-size:1.05rem">hello@aaravverma.in</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="home">
+    <div class="hero-guides" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="container position-relative">
+      <div class="hero-meta" data-reveal>
+        <span class="avail"><i></i> Available for freelance</span>
+        <span class="hero-coords">New Delhi, India — <span class="js-time">--:--:--</span></span>
+      </div>
+
+      <h1 class="hero-title lm-group" data-reveal>
+        <span class="lm"><span class="lmi">Creative</span></span>
+        <span class="lm"><span class="lmi" style="--d:.1s">
+          <!-- ✏️ Apni photo ka link yahan daalo -->
+          <span class="hero-chip img-reveal"><img src="https://picsum.photos/seed/folio-chip/300/200.jpg" alt=""></span>
+          Developer<span class="accent">.</span>
+        </span></span>
+      </h1>
+
+      <div class="hero-bottom">
+        <p class="hero-desc" data-reveal style="--d:.25s">
+          I'm <strong>Aarav Verma</strong> — a creative developer crafting expressive,
+          high-performing websites for brands that refuse to blend in.
+          Currently building at <strong>PixelForge Studio</strong>.
+        </p>
+        <div class="badge-rot d-none d-md-block" data-reveal style="--d:.35s" aria-hidden="true">
+          <svg viewBox="0 0 100 100">
+            <defs><path id="circ" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+            <text><textPath href="#circ" textLength="238" lengthAdjust="spacingAndGlyphs">SCROLL TO EXPLORE • SCROLL TO EXPLORE •</textPath></text>
+          </svg>
+          <i class="bi bi-arrow-down"></i>
+        </div>
+      </div>
+    </div>
+    <span class="scroll-cue d-none d-lg-block" aria-hidden="true">SCROLL</span>
+  </section>
+
+  <!-- ================= MARQUEE ================= -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="m-group">
+        <span class="m-item"><i class="bi bi-asterisk"></i>UI/UX Design</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Web Development</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Motion Design</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Brand Identity</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Creative Direction</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Interaction Design</span>
+      </div>
+      <div class="m-group">
+        <span class="m-item"><i class="bi bi-asterisk"></i>UI/UX Design</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Web Development</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Motion Design</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Brand Identity</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Creative Direction</span>
+        <span class="m-item"><i class="bi bi-asterisk"></i>Interaction Design</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="sec" id="about">
+    <div class="container">
+      <div class="row gy-5">
+        <div class="col-lg-5 about-img-wrap">
+          <div class="about-sticky">
+            <span class="label" data-reveal><span class="idx">(01)</span>About me</span>
+            <!-- ✏️ Apni portrait photo -->
+            <div class="about-img img-reveal mt-4" data-reveal>
+              <img src="https://picsum.photos/seed/folio-portrait/800/1000.jpg" alt="Portrait" loading="lazy" data-parallax="0.09">
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 offset-lg-1">
+          <!-- Scroll-linked word scrub manifesto -->
+          <p class="statement" id="statement">
+            <span class="w">I</span> <span class="w">help</span> <span class="w">ambitious</span> <span class="w">brands</span> <span class="w">turn</span> <span class="w">rough</span> <span class="w">ideas</span> <span class="w">into</span> <span class="w wa">refined</span> <span class="w wa">digital</span> <span class="w wa">products</span> <span class="w">—</span> <span class="w">pairing</span> <span class="w">considered</span> <span class="w">design</span> <span class="w">with</span> <span class="w">performant</span> <span class="w">code</span> <span class="w">to</span> <span class="w">craft</span> <span class="w">experiences</span> <span class="w">people</span> <span class="w">actually</span> <span class="w wa">remember.</span>
+          </p>
+          <p class="about-sub" data-reveal>
+            Over the last six years I've moved between design and engineering — and that's
+            exactly where I like to live. I obsess over the details most people scroll past:
+            easing curves, kerning, load times, the weight of a hover state.
+          </p>
+          <p class="about-sub" data-reveal style="--d:.1s">
+            When I'm not shipping, you'll find me shooting film photography or over-engineering
+            my espresso setup.
+          </p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="row stats-row g-4">
+        <div class="col-6 col-lg-3" data-reveal><div class="stat"><span class="stat-n" data-count="6" data-suffix="+">0</span><span class="stat-l">Years of experience</span></div></div>
+        <div class="col-6 col-lg-3" data-reveal style="--d:.08s"><div class="stat"><span class="stat-n" data-count="48" data-suffix="">0</span><span class="stat-l">Projects shipped</span></div></div>
+        <div class="col-6 col-lg-3" data-reveal style="--d:.16s"><div class="stat"><span class="stat-n" data-count="32" data-suffix="">0</span><span class="stat-l">Happy clients</span></div></div>
+        <div class="col-6 col-lg-3" data-reveal style="--d:.24s"><div class="stat"><span class="stat-n" data-count="12" data-suffix="">0</span><span class="stat-l">Design awards</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WORK ================= -->
+  <section class="sec" id="work" style="padding-top:0">
+    <div class="container">
+      <div class="works-head">
+        <div>
+          <span class="label" data-reveal><span class="idx">(02)</span>Selected works</span>
+          <h2 class="sec-title lm-group" data-reveal>
+            <span class="lm"><span class="lmi">Work that</span></span>
+            <span class="lm"><span class="lmi" style="--d:.1s">speaks<em class="accent">.</em></span></span>
+          </h2>
+        </div>
+        <span class="works-range" data-reveal>2023 — 2025 / 04 Projects</span>
+      </div>
+
+      <div class="row gy-5">
+        <div class="col-lg-7">
+          <article class="work" data-reveal data-project="p1" data-cursor-label="View" role="button" tabindex="0" aria-haspopup="dialog">
+            <figure class="work-figure img-reveal ar-43" data-parallax="0.05">
+              <img src="https://picsum.photos/seed/folio-lumen/1100/820.jpg" alt="Lumen Studio website" loading="lazy">
+            </figure>
+            <div class="work-info">
+              <div class="work-top">
+                <h3 class="work-title">Lumen Studio</h3>
+                <span class="work-link"><i class="bi bi-arrow-up-right"></i></span>
+              </div>
+              <p class="work-meta">Brand Website — 2025</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-lg-4 offset-lg-1 col-push">
+          <article class="work" data-reveal style="--d:.12s" data-project="p2" data-cursor-label="View" role="button" tabindex="0" aria-haspopup="dialog">
+            <figure class="work-figure img-reveal ar-34" data-parallax="0.08">
+              <img src="https://picsum.photos/seed/folio-kaya/900/1150.jpg" alt="Kaya Skincare store" loading="lazy">
+            </figure>
+            <div class="work-info">
+              <div class="work-top">
+                <h3 class="work-title">Kaya Skincare</h3>
+                <span class="work-link"><i class="bi bi-arrow-up-right"></i></span>
+              </div>
+              <p class="work-meta">E-Commerce Experience — 2024</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="row gy-5 works-row2">
+        <div class="col-lg-5">
+          <article class="work" data-reveal data-project="p3" data-cursor-label="View" role="button" tabindex="0" aria-haspopup="dialog">
+            <figure class="work-figure img-reveal ar-45" data-parallax="0.07">
+              <img src="https://picsum.photos/seed/folio-orbit/900/1100.jpg" alt="Orbit Finance app" loading="lazy">
+            </figure>
+            <div class="work-info">
+              <div class="work-top">
+                <h3 class="work-title">Orbit Finance</h3>
+                <span class="work-link"><i class="bi bi-arrow-up-right"></i></span>
+              </div>
+              <p class="work-meta">Product Design & Build — 2024</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-lg-6 offset-lg-1 col-push2">
+          <article class="work" data-reveal style="--d:.12s" data-project="p4" data-cursor-label="View" role="button" tabindex="0" aria-haspopup="dialog">
+            <figure class="work-figure img-reveal ar-32" data-parallax="0.05">
+              <img src="https://picsum.photos/seed/folio-terra/1200/800.jpg" alt="Terra Coffee landing page" loading="lazy">
+            </figure>
+            <div class="work-info">
+              <div class="work-top">
+                <h3 class="work-title">Terra Coffee</h3>
+                <span class="work-link"><i class="bi bi-arrow-up-right"></i></span>
+              </div>
+              <p class="work-meta">Interactive Landing — 2023</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="works-cta" data-reveal>
+        <span class="label d-block mb-3">Have a project in mind?</span>
+        <a href="#contact" class="btn-x magnetic"><span>Let's build it together <i class="bi bi-arrow-down"></i></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPERTISE ================= -->
+  <section class="sec" id="expertise" style="padding-top:0">
+    <div class="container">
+      <span class="label" data-reveal><span class="idx">(03)</span>Expertise</span>
+      <h2 class="sec-title lm-group mb-5" data-reveal>
+        <span class="lm"><span class="lmi">What I do</span></span>
+        <span class="lm"><span class="lmi" style="--d:.1s">best<em class="accent">.</em></span></span>
+      </h2>
+
+      <div class="accordion" id="accExpertise" data-reveal>
+        <div class="accordion-item acc-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#s1" aria-expanded="true">
+              <span class="acc-num">/01</span> Web Development
+              <span class="acc-icon"><i class="bi bi-plus-lg"></i></span>
+            </button>
+          </h3>
+          <div id="s1" class="accordion-collapse collapse show" data-bs-parent="#accExpertise">
+            <div class="accordion-body">
+              <p class="acc-desc">From blazing-fast marketing sites to complex web apps — semantic, accessible, and tuned for high-refresh-rate displays. Clean, maintainable code that scales with your product.</p>
+              <span class="tag">HTML / CSS / JS</span><span class="tag">React &amp; Next.js</span><span class="tag">Node.js</span><span class="tag">Performance</span>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item acc-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#s2">
+              <span class="acc-num">/02</span> UI/UX Design
+              <span class="acc-icon"><i class="bi bi-plus-lg"></i></span>
+            </button>
+          </h3>
+          <div id="s2" class="accordion-collapse collapse" data-bs-parent="#accExpertise">
+            <div class="accordion-body">
+              <p class="acc-desc">Interfaces that feel obvious. I map user journeys, prototype fast, and polish every state until the experience disappears into the product.</p>
+              <span class="tag">Design Systems</span><span class="tag">Wireframing</span><span class="tag">Prototyping</span><span class="tag">UX Research</span>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item acc-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#s3">
+              <span class="acc-num">/03</span> Motion &amp; Interaction
+              <span class="acc-icon"><i class="bi bi-plus-lg"></i></span>
+            </button>
+          </h3>
+          <div id="s3" class="accordion-collapse collapse" data-bs-parent="#accExpertise">
+            <div class="accordion-body">
+              <p class="acc-desc">Scroll choreography, micro-interactions and page transitions that give a website its soul — always purposeful, never noisy.</p>
+              <span class="tag">Scroll Animation</span><span class="tag">Micro-interactions</span><span class="tag">WebGL Basics</span><span class="tag">Lottie</span>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item acc-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#s4">
+              <span class="acc-num">/04</span> Brand Identity
+              <span class="acc-icon"><i class="bi bi-plus-lg"></i></span>
+            </button>
+          </h3>
+          <div id="s4" class="accordion-collapse collapse" data-bs-parent="#accExpertise">
+            <div class="accordion-body">
+              <p class="acc-desc">Logos, type systems and visual languages that make brands instantly recognisable across every screen and surface.</p>
+              <span class="tag">Logo Design</span><span class="tag">Art Direction</span><span class="tag">Typography</span><span class="tag">Guidelines</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <section class="sec" id="experience" style="padding-top:0">
+    <div class="container">
+      <span class="label" data-reveal><span class="idx">(04)</span>Experience</span>
+      <h2 class="sec-title lm-group mb-5" data-reveal>
+        <span class="lm"><span class="lmi">Where I've</span></span>
+        <span class="lm"><span class="lmi" style="--d:.1s">worked<em class="accent">.</em></span></span>
+      </h2>
+
+      <div data-reveal>
+        <div class="xp-row">
+          <span class="xp-year">2023 — Now</span>
+          <div class="xp-main"><span class="xp-role">Senior Frontend Engineer</span><span class="xp-co">PixelForge Studio</span></div>
+          <span class="xp-loc">Remote</span>
+          <span class="xp-arrow"><i class="bi bi-arrow-up-right"></i></span>
+        </div>
+        <div class="xp-row">
+          <span class="xp-year">2021 — 2023</span>
+          <div class="xp-main"><span class="xp-role">UI Developer</span><span class="xp-co">Craftly Agency</span></div>
+          <span class="xp-loc">Bengaluru</span>
+          <span class="xp-arrow"><i class="bi bi-arrow-up-right"></i></span>
+        </div>
+        <div class="xp-row">
+          <span class="xp-year">2019 — 2021</span>
+          <div class="xp-main"><span class="xp-role">Web Designer</span><span class="xp-co">Freelance</span></div>
+          <span class="xp-loc">New Delhi</span>
+          <span class="xp-arrow"><i class="bi bi-arrow-up-right"></i></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT / FOOTER ================= -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <span class="label" data-reveal><span class="idx">(05)</span>Contact</span>
+      <a class="footer-cta" href="mailto:hello@aaravverma.in" data-cursor-label="Say hello">
+        <h2 class="sec-title lm-group" data-reveal>
+          <span class="lm"><span class="lmi">Let's work</span></span>
+          <span class="lm"><span class="lmi" style="--d:.1s"><em class="outline">Together</em><i class="bi bi-arrow-up-right cta-arrow"></i></span></span>
+        </h2>
+      </a>
+
+      <div class="row footer-info gy-4">
+        <div class="col-md-7" data-reveal>
+          <span class="label d-block mb-2">Email</span>
+          <a class="big-link" href="mailto:hello@aaravverma.in">hello@aaravverma.in</a>
+          <p class="mt-3 mb-0" style="color:var(--muted);font-size:.92rem">Currently booking for Q3 2025 — one slot left.</p>
+        </div>
+        <div class="col-md-5" data-reveal style="--d:.1s">
+          <span class="label d-block mb-3">Elsewhere</span>
+          <div class="socials">
+            <a class="soc magnetic" href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub"><i class="bi bi-github"></i></a>
+            <a class="soc magnetic" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <a class="soc magnetic" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a class="soc magnetic" href="https://dribbble.com" target="_blank" rel="noopener" aria-label="Dribbble"><i class="bi bi-dribbble"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bar">
+        <span>© 2025 Aarav Verma — All rights reserved</span>
+        <span>New Delhi, IN — <span class="js-time">--:--:--</span> IST</span>
+        <a href="#home" class="to-top magnetic" aria-label="Back to top"><i class="bi bi-arrow-up"></i></a>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<!-- ===== Project Modal ===== -->
+<div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+    <div class="modal-content" data-lenis-prevent>
+      <button type="button" class="modal-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+      <img class="pm-img" id="pmImg" src="" alt="">
+      <div class="modal-body p-4 p-md-5">
+        <div class="d-flex justify-content-between align-items-baseline flex-wrap gap-2 mb-4">
+          <h3 id="pmTitle" style="font-family:var(--font-d);font-weight:600;font-size:clamp(1.7rem,3.5vw,2.6rem);letter-spacing:-.01em"></h3>
+          <span class="pm-year" id="pmYear"></span>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4 pm-meta">
+            <div><span class="label">Client</span><span id="pmClient"></span></div>
+            <div><span class="label">Role</span><span id="pmRole"></span></div>
+            <div><span class="label">Category</span><span id="pmCat"></span></div>
+          </div>
+          <div class="col-md-8">
+            <p id="pmDesc" style="color:var(--muted);line-height:1.75"></p>
+            <div id="pmTags"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+<script>
+document.documentElement.classList.add('js');
+
+const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isTouch = matchMedia('(hover: none)').matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+/* ---------- Lenis smooth scroll (buttery, rAF-driven) ---------- */
+let lenis = null;
+if (window.Lenis && !prefersReduced) {
+  lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+  lenis.stop(); // preloader ke dauran scroll lock
+}
+
+/* ---------- Smooth anchor navigation ---------- */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    const target = id.length > 1 && document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const oc = bootstrap.Offcanvas.getInstance(document.getElementById('menu'));
+    if (oc) oc.hide();
+    if (lenis) lenis.scrollTo(target, { offset: -70, duration: 1.4 });
+    else target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+/* ---------- Preloader: 0 → 100 counter, phir curtain up ---------- */
+const pl = document.getElementById('preloader');
+const plNum = document.getElementById('plNum');
+const plBar = document.getElementById('plBar');
+
+function initReveals() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+}
+
+function finishLoad() {
+  pl.classList.add('exit');
+  if (lenis) lenis.start();
+  initReveals();
+  setTimeout(() => pl.remove(), 1100);
+}
+
+if (prefersReduced) {
+  pl.remove(); initReveals();
+} else {
+  window.scrollTo(0, 0);
+  const t0 = performance.now(), dur = 1250;
+  (function count(t) {
+    const p = clamp((t - t0) / dur, 0, 1);
+    const eased = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    plNum.textContent = Math.round(eased * 100);
+    plBar.style.transform = `scaleX(${eased})`;
+    if (p < 1) requestAnimationFrame(count); else setTimeout(finishLoad, 150);
+  })(t0);
+}
+
+/* ---------- Reveal ke baad hi stats counters ---------- */
+const cio = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    cio.unobserve(en.target);
+    const el = en.target, target = +el.dataset.count, suf = el.dataset.suffix || '';
+    const t0 = performance.now(), dur = 1700;
+    (function tick(t) {
+      const p = clamp((t - t0) / dur, 0, 1);
+      const e = 1 - Math.pow(1 - p, 4); // easeOutQuart
+      el.innerHTML = Math.round(e * target) + `<em>${suf}</em>`;
+      if (p < 1) requestAnimationFrame(tick);
+    })(t0);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+/* ---------- Word-scrub: sirf viewport me active ---------- */
+const statement = document.getElementById('statement');
+const words = [...statement.querySelectorAll('.w')];
+let scrubOn = false, lastP = -1;
+new IntersectionObserver(es => es.forEach(e => scrubOn = e.isIntersecting),
+  { rootMargin: '25% 0px 25% 0px' }).observe(statement);
+
+/* ---------- Parallax: parent measure, element transform ---------- */
+let pItems = [];
+if (!isTouch && !prefersReduced) {
+  pItems = [...document.querySelectorAll('[data-parallax]')].map(el => ({
+    el, sp: parseFloat(el.dataset.parallax) || .08, parent: el.parentElement, active: false, y: 0
+  }));
+  const pio = new IntersectionObserver(es => es.forEach(en => {
+    const it = pItems.find(i => i.parent === en.target);
+    if (it) it.active = en.isIntersecting;
+  }), { rootMargin: '160px 0px' });
+  pItems.forEach(i => pio.observe(i.parent));
+}
+
+/* ---------- Magnetic elements ---------- */
+let magnets = [];
+if (!isTouch && !prefersReduced) {
+  magnets = [...document.querySelectorAll('.magnetic')].map(el => ({
+    el, x: 0, y: 0, tx: 0, ty: 0, on: false
+  }));
+  magnets.forEach(m => {
+    m.el.addEventListener('mouseenter', () => m.on = true);
+    m.el.addEventListener('mousemove', e => {
+      const r = m.el.getBoundingClientRect();
+      m.tx = (e.clientX - (r.left + r.width / 2)) * 0.32;
+      m.ty = (e.clientY - (r.top + r.height / 2)) * 0.32;
+    });
+    m.el.addEventListener('mouseleave', () => { m.on = false; m.tx = 0; m.ty = 0; });
+  });
+}
+
+/* ---------- Custom cursor ---------- */
+const cDot = document.getElementById('cDot'), cRing = document.getElementById('cRing');
+const cLabel = document.getElementById('cLabel');
+let cx = innerWidth / 2, cy = innerHeight / 2, rx = cx, ry = cy, cursorOn = false;
+if (!isTouch && !prefersReduced) {
+  window.addEventListener('mousemove', e => {
+    cx = e.clientX; cy = e.clientY;
+    if (!cursorOn) { cursorOn = true; document.body.classList.add('cursor-on'); rx = cx; ry = cy; }
+  }, { passive: true });
+  document.addEventListener('mouseover', e => {
+    const labelled = e.target.closest('[data-cursor-label]');
+    const hoverable = e.target.closest('a, button, [role="button"]');
+    if (labelled) { cLabel.textContent = labelled.dataset.cursorLabel; document.body.classList.add('cursor-view'); }
+    else document.body.classList.remove('cursor-view');
+    document.body.classList.toggle('cursor-grow', !!hoverable && !labelled);
+  });
+  document.addEventListener('mouseleave', () => document.body.classList.remove('cursor-on'));
+  document.addEventListener('mouseenter', () => cursorOn && document.body.classList.add('cursor-on'));
+}
+
+/* ---------- MASTER rAF LOOP — sab kuch ek hi loop me, transform/opacity only ---------- */
+const nav = document.getElementById('nav');
+const progress = document.getElementById('progress');
+let lastSy = -1, maxScroll = 1;
+
+function onResize() { maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight); }
+addEventListener('resize', onResize); onResize();
+
+function loop(t) {
+  if (lenis) lenis.raf(t);
+  const vh = innerHeight;
+  const sy = window.scrollY;
+
+  // nav state + progress bar (sirf scroll change par)
+  if (sy !== lastSy) {
+    lastSy = sy;
+    nav.classList.toggle('scrolled', sy > 30);
+    progress.style.transform = `scaleX(${clamp(sy / maxScroll, 0, 1).toFixed(4)})`;
+  }
+
+  // word scrub
+  if (scrubOn) {
+    const r = statement.getBoundingClientRect();
+    const p = clamp((vh * 0.9 - r.top) / (r.height + vh * 0.45), 0, 1);
+    if (Math.abs(p - lastP) > 0.002) {
+      lastP = p;
+      const f = p * words.length;
+      words.forEach((w, i) => w.style.opacity = clamp(f - i, 0.13, 1).toFixed(2));
+    }
+  }
+
+  // parallax (lerp ke saath extra smooth)
+  for (const it of pItems) {
+    if (!it.active) continue;
+    const r = it.parent.getBoundingClientRect();
+    if (r.bottom < -160 || r.top > vh + 160) continue;
+    const target = (r.top + r.height / 2 - vh / 2) * -it.sp;
+    it.y += (target - it.y) * 0.09;
+    it.el.style.transform = `translate3d(0,${it.y.toFixed(2)}px,0)`;
+  }
+
+  // magnetic lerp
+  for (const m of magnets) {
+    m.x += (m.tx - m.x) * 0.14; m.y += (m.ty - m.y) * 0.14;
+    if (Math.abs(m.x) > .05 || Math.abs(m.y) > .05 || m.on)
+      m.el.style.transform = `translate3d(${m.x.toFixed(2)}px,${m.y.toFixed(2)}px,0)`;
+  }
+
+  // cursor
+  if (cursorOn) {
+    cDot.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+    rx += (cx - rx) * 0.16; ry += (cy - ry) * 0.16;
+    cRing.style.transform = `translate3d(${rx.toFixed(1)}px,${ry.toFixed(1)}px,0)`;
+  }
+
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ---------- Nav active state (manual scrollspy) ---------- */
+const navLinks = [...document.querySelectorAll('.nav-link-x')];
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting)
+    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+}), { rootMargin: '-40% 0px -55% 0px' });
+['about', 'work', 'expertise', 'contact'].forEach(id => spy.observe(document.getElementById(id)));
+
+/* ---------- Offcanvas ke saath Lenis sync ---------- */
+const menuEl = document.getElementById('menu');
+menuEl.addEventListener('show.bs.offcanvas', () => lenis && lenis.stop());
+menuEl.addEventListener('hidden.bs.offcanvas', () => lenis && lenis.start());
+
+/* ---------- Project modal (real content, data-driven) ---------- */
+const projects = {
+  p1: { title: 'Lumen Studio', cat: 'Brand Website', year: '2025', client: 'Lumen Studio, Berlin', role: 'Design & Development',
+    img: 'https://picsum.photos/seed/folio-lumen/1400/900.jpg',
+    desc: 'A cinematic portfolio platform for a Berlin-based photography studio. Built around a scroll-driven gallery with buttery page transitions and a lightweight, CMS-less content workflow that the team updates from a single JSON file.',
+    tags: ['Art Direction', 'Next.js', 'Scroll Animation', 'SVG Motion'] },
+  p2: { title: 'Kaya Skincare', cat: 'E-Commerce Experience', year: '2024', client: 'Kaya Beauty Co.', role: 'Frontend Development',
+    img: 'https://picsum.photos/seed/folio-kaya/1400/900.jpg',
+    desc: 'A calm, minimal shopping experience for a clean-beauty label. Product storytelling, ingredient glossaries and a reworked checkout flow that converted 34% better than the previous build — all at a 98 Lighthouse performance score.',
+    tags: ['E-Commerce', 'Design System', 'Performance', 'A/B Testing'] },
+  p3: { title: 'Orbit Finance', cat: 'Product Design & Build', year: '2024', client: 'Orbit Labs', role: 'Product Design + Frontend',
+    img: 'https://picsum.photos/seed/folio-orbit/1400/900.jpg',
+    desc: 'A personal-finance product for first-time investors — real-time portfolio visualisations, habit-building streaks, and an onboarding flow that gets users invested in under two minutes.',
+    tags: ['React', 'Data Viz', 'Motion Design', 'Design Tokens'] },
+  p4: { title: 'Terra Coffee', cat: 'Interactive Landing', year: '2023', client: 'Terra Roasters', role: 'Design & Development',
+    img: 'https://picsum.photos/seed/folio-terra/1400/900.jpg',
+    desc: 'An award-submitted landing page for a specialty roaster. The scroll tells the story from bean to cup with tilt-reactive product shots, while staying razor-sharp on performance and SEO.',
+    tags: ['Landing Page', '3D Tilt', 'WebGL', 'SEO'] }
+};
+
+const modalEl = document.getElementById('projectModal');
+const pmModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+modalEl.addEventListener('show.bs.modal', () => lenis && lenis.stop());
+modalEl.addEventListener('hidden.bs.modal', () => lenis && lenis.start());
+
+function openProject(id) {
+  const p = projects[id]; if (!p) return;
+  document.getElementById('pmImg').src = p.img;
+  document.getElementById('pmTitle').textContent = p.title;
+  document.getElementById('pmYear').textContent = '© ' + p.year;
+  document.getElementById('pmClient').textContent = p.client;
+  document.getElementById('pmRole').textContent = p.role;
+  document.getElementById('pmCat').textContent = p.cat;
+  document.getElementById('pmDesc').textContent = p.desc;
+  document.getElementById('pmTags').innerHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  pmModal.show();
+}
+document.querySelectorAll('[data-project]').forEach(el => {
+  el.addEventListener('click', () => openProject(el.dataset.project));
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProject(el.dataset.project); }
+  });
+});
+
+/* ---------- Live IST clock ---------- */
+const timeEls = document.querySelectorAll('.js-time');
+function tick() {
+  const s = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false, timeZone: 'Asia/Kolkata'
+  }).format(new Date());
+  timeEls.forEach(el => el.textContent = s);
+}
+tick(); setInterval(tick, 1000);
+</script>
+</body>
+</html>
